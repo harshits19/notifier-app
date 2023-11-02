@@ -34,11 +34,7 @@ const AuthSection = () => {
       <Button variant="ghost" size="sm" className="hidden md:block">
         <Link href="/docs">Enter Notifier</Link>
       </Button>
-      <UserButton afterSignOutUrl="/">
-        <Button variant="ghost" size="sm">
-          Logout
-        </Button>
-      </UserButton>
+      <UserButton afterSignOutUrl="/"></UserButton>
     </>
   )
 }
@@ -49,10 +45,9 @@ const Navbar = () => {
   return (
     <nav
       className={cn(
-        "sticky top-0 z-50 flex w-full items-center bg-background p-6",
+        "sticky top-0 z-50 flex w-full items-center bg-background px-6 py-4",
         scrolled && "border-b shadow-sm",
-      )}
-    >
+      )}>
       <Logo />
       <div className="flex w-full items-center justify-end gap-x-1 sm:gap-x-2">
         <AuthSection />

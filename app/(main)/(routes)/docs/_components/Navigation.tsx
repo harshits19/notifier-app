@@ -1,13 +1,21 @@
 import { useState, useRef, ElementRef, useEffect } from "react"
-import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react"
+import {
+  ChevronsLeft,
+  MenuIcon,
+  Plus,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useMediaQuery } from "usehooks-ts"
 import { cn } from "@/lib/utils"
 import UserItems from "./UserItems"
-import { useQuery, useMutation } from "convex/react"
+import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import Item from "./Item"
 import { toast } from "sonner"
+import DocumentList from "./DocumentList"
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -18,7 +26,6 @@ const Navigation = () => {
   const [isResetting, setIsResetting] = useState<boolean>(false) //state while resetting the sidebar width(to show animations)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobile) //state of sidebar
 
-  const documents = useQuery(api.documents.get)
   const create = useMutation(api.documents.create)
   const handleCreate = () => {
     const promise = create({ title: "Untitled" })
@@ -108,9 +115,12 @@ const Navigation = () => {
           <ChevronsLeft className="h-6 w-6" />
         </button>
         <UserItems />
+        <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+        <Item label="Settings" icon={Settings} onClick={() => {}} />
         <Item onClick={handleCreate} label="New Note" icon={PlusCircle} />
-        <div className="p-4">
-          {documents?.map((doc) => <p key={doc?._id}>{doc?.title}</p>)}
+        <div className="mt-4">
+          <DocumentList />
+        <Item onClick={handleCreate} label="Add a note" icon={Plus} />
         </div>
         <div
           onMouseDown={handleSidebarResize}

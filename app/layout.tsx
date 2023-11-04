@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { ConvexClientProvider } from "@/components/providers/convex-provider"
+import { ModalProvider } from "@/components/providers/modal-provider"
 import { Toaster } from "sonner"
 
 const roboto = Roboto({
@@ -43,9 +44,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-            storageKey="themeVal"
-          >
-            <Toaster position="bottom-center"/>
+            storageKey="themeVal">
+            <Toaster position="bottom-center" />
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </ConvexClientProvider>

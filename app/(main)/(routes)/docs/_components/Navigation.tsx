@@ -23,8 +23,12 @@ import {
 } from "@/components/ui/popover"
 import DocumentList from "./DocumentList"
 import TrashBox from "./TrashBox"
+import { useSearch } from "@/hooks/useSearch"
+import { useSetting } from "@/hooks/useSetting"
 
 const Navigation = () => {
+  const search = useSearch()
+  const setting = useSetting()
   const pathname = usePathname()
   const isMobile = useMediaQuery("(max-width:768px)") //detect mobile device
   const isResizingRef = useRef<boolean>(false) //to get resizing state of sidebar
@@ -116,7 +120,7 @@ const Navigation = () => {
         )}>
         <button
           className={cn(
-            "absolute right-2 top-3 h-6 w-6 rounded-sm text-muted-foreground opacity-0 transition hover:bg-neutral-300 group-hover/sidebar:opacity-100",
+            "absolute right-2 top-3 h-6 w-6 rounded-sm text-muted-foreground opacity-0 transition hover:bg-neutral-300 dark:hover:bg-neutral-600 group-hover/sidebar:opacity-100",
             isMobile && "opacity-100",
           )}
           title="Close sidebar"
@@ -125,8 +129,8 @@ const Navigation = () => {
         </button>
         <UserItems />
         {/* Navigation Items starts */}
-        <Item label="Search" icon={Search} isSearch onClick={() => {}} />
-        <Item label="Settings" icon={Settings} onClick={() => {}} />
+        <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
+        <Item label="Settings" icon={Settings} onClick={setting.onOpen} />
         <Item label="New Note" icon={PlusCircle} onClick={handleCreate} />
         <div className="mt-4">
           <DocumentList />

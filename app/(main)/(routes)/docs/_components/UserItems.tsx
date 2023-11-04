@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
@@ -13,6 +12,7 @@ import { SignOutButton, useUser } from "@clerk/clerk-react"
 import { ChevronsLeftRight } from "lucide-react"
 
 const UserItems = () => {
+  /* user items displays the user details  */
   const { user } = useUser()
   return (
     <DropdownMenu>
@@ -62,7 +62,5 @@ const UserItems = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   )
-
-  //   return <div>UserItems</div>
 }
 export default UserItems

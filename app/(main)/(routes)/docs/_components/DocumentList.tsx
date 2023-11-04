@@ -47,12 +47,12 @@ const DocumentList = ({ parentDocumentId, level = 0, data }: DocListProps) => {
         className={cn(
           "hidden text-sm font-medium text-muted-foreground/80",
           expanded && "last:block",
-          level === 0 && "hidden",
+          level === 0 && "hidden",/* only display when there's no children */
         )}>
         No pages inside
-      </p>
+      </p>{/* render documents */}
       {documents.map((doc) => (
-        <div key={doc._id} className="">
+        <div key={doc._id}>
           <Item
             id={doc._id}
             onClick={() => onRedirect(doc._id)}
@@ -64,6 +64,7 @@ const DocumentList = ({ parentDocumentId, level = 0, data }: DocListProps) => {
             onExpand={() => onExpand(doc._id)}
             expanded={expanded[doc._id]}
           />
+          {/* recalling documentlist component and passing prop of parentDocId to render children */}
           {expanded[doc._id] && (
             <DocumentList parentDocumentId={doc._id} level={level + 1} />
           )}

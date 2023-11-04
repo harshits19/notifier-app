@@ -15,3 +15,6 @@ export default defineSchema({
     .index("by_user",["userId"])
     .index("by_user_parent",["userId","parentDocument"])
 });
+/* Schema
+Document-> UserID  TaskTitle   ArchieveStatus    ParentDoc(Document)   Content     CoverImg    Icon    PublishStatus
+*/

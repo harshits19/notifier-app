@@ -23,7 +23,7 @@ import { toast } from "sonner"
 import { useUser } from "@clerk/clerk-react"
 
 type ItemProps = {
-  id?: Id<"documents">
+  id?: Id<"documents">/* Id of parent note is provided while creating a children note */
   documentIcon?: string
   active?: boolean
   expanded?: boolean
@@ -31,7 +31,7 @@ type ItemProps = {
   level?: number
   onExpand?: () => void
   label: string
-  onClick: () => void
+  onClick?: () => void
   icon: LucideIcon
 }
 const Item = ({
@@ -55,11 +55,12 @@ const Item = ({
 
   const { user } = useUser()
   const router = useRouter()
-  const create = useMutation(api.documents.create)
+  const create = useMutation(api.documents.create) //subscribing to create and archive methods in documents api
   const archive = useMutation(api.documents.archive)
-  const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+
+  const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => { /* fn for creating a child user */
     event.stopPropagation()
-    if (!id) return
+    if (!id) return 
     const promise = create({ title: "Untitled", parentDocument: id }).then(
       (documentId) => {
         if (!expanded) {
@@ -74,10 +75,11 @@ const Item = ({
       error: "Failed to create a new note.",
     })
   }
+  /* fn for archiving current doc(with children), id of parent must be passed */
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation()
     if (!id) return
-    const promise = archive({ id })
+    const promise = archive({ id }) /* logic behind- mark archieved status to false in database entry of note */
     toast.promise(promise, {
       loading: "Moving to trash...",
       success: "Note moved to trash!",
@@ -86,7 +88,11 @@ const Item = ({
   }
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight
-
+/* id = string
+!id => boolean (if id is present then !id = false)
+!!id => !(false) => !!id = true
+hence !!id = Boolean(id) = true (if id is present)
+*/
   return (
     <div
       onClick={onClick}
@@ -96,7 +102,7 @@ const Item = ({
         "group flex min-h-[27px]  w-full items-center py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
         active && "bg-primary/5 text-primary",
       )}>
-      {!!id && (
+      {!!id && (/* to handle child notes dropdown */
         <div
           role="button"
           className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"

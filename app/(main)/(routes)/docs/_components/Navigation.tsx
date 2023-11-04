@@ -6,6 +6,7 @@ import {
   PlusCircle,
   Search,
   Settings,
+  Trash,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useMediaQuery } from "usehooks-ts"
@@ -15,7 +16,13 @@ import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import Item from "./Item"
 import { toast } from "sonner"
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover"
 import DocumentList from "./DocumentList"
+import TrashBox from "./TrashBox"
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -25,16 +32,6 @@ const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null)
   const [isResetting, setIsResetting] = useState<boolean>(false) //state while resetting the sidebar width(to show animations)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobile) //state of sidebar
-
-  const create = useMutation(api.documents.create)
-  const handleCreate = () => {
-    const promise = create({ title: "Untitled" })
-    toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note.",
-    })
-  }
 
   useEffect(() => {
     if (isMobile) collapseSidebar()
@@ -95,6 +92,18 @@ const Navigation = () => {
     }
   }
 
+  //Backend
+  const create = useMutation(api.documents.create) //subscribing to create fn() in api
+  const handleCreate = () => {
+    const promise = create({ title: "Untitled" }) //create a new entry in db with tile - "untitled" , returns status(success/fail/error)
+    toast.promise(promise, {
+      //display toast on basis of return status from db
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to create a new note.",
+    })
+  }
+
   return (
     <>
       <aside
@@ -115,12 +124,23 @@ const Navigation = () => {
           <ChevronsLeft className="h-6 w-6" />
         </button>
         <UserItems />
+        {/* Navigation Items starts */}
         <Item label="Search" icon={Search} isSearch onClick={() => {}} />
         <Item label="Settings" icon={Settings} onClick={() => {}} />
-        <Item onClick={handleCreate} label="New Note" icon={PlusCircle} />
+        <Item label="New Note" icon={PlusCircle} onClick={handleCreate} />
         <div className="mt-4">
           <DocumentList />
-        <Item onClick={handleCreate} label="Add a note" icon={Plus} />
+          <Item label="Add a note" icon={Plus} onClick={handleCreate} />
+          <Popover>
+            <PopoverTrigger className="mt-4 w-full">
+              <Item label="Trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              side={isMobile ? "bottom" : "right"}
+              className="w-72 p-0">
+              <TrashBox />
+            </PopoverContent>
+          </Popover>
         </div>
         <div
           onMouseDown={handleSidebarResize}

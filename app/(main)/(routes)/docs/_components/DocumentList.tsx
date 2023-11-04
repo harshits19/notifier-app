@@ -59,7 +59,7 @@ const DocumentList = ({ parentDocumentId, level = 0, data }: DocListProps) => {
             label={doc.title}
             documentIcon={doc.icon}
             icon={FileIcon}
-            active={params.documentId === doc._id}
+            active={params.docId === doc._id}
             level={level}
             onExpand={() => onExpand(doc._id)}
             expanded={expanded[doc._id]}

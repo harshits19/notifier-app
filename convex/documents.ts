@@ -11,6 +11,44 @@ import { Doc, Id } from "./_generated/dataModel"
   },
 }) */
 /* Mutation - update */
+export const update = mutation({
+  args: {
+    id: v.id("documents"),
+    title: v.optional(v.string()),
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    isPublished: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    if (!identity) throw new Error("Not Authenticated")
+    const userId = identity.subject
+    const { id, ...rest } = args //we update rest info, but not id
+    //here , we partitioned args in two data, one is id , others[title,icon,..] in rest args
+    const existingDocuments = await ctx.db.get(args.id)
+    if (!existingDocuments) throw new Error("Not found")
+    if (existingDocuments.userId !== userId) throw new Error("Unauthorized")
+    const document = await ctx.db.patch(args.id, { ...rest })
+    return document
+  },
+})
+
+export const getById = query({
+  args: { documentId: v.id("documents") },
+  //logic for accessing post Publically
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity()
+    const document = await ctx.db.get(args.documentId)
+    if (!document) throw new Error("Not found")
+    if (document.isPublished && !document.isArchived) return document
+    //for post admin
+    if (!identity) throw new Error("Not Authenticated")
+    const userId = identity.subject
+    if (document.userId !== userId) throw new Error("Unauthorized")
+    return document
+  },
+})
 
 export const getSearch = query({
   handler: async (ctx) => {

@@ -8,7 +8,7 @@ import {
   Settings,
   Trash,
 } from "lucide-react"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { useMediaQuery } from "usehooks-ts"
 import { cn } from "@/lib/utils"
 import UserItems from "./UserItems"
@@ -25,11 +25,13 @@ import DocumentList from "./DocumentList"
 import TrashBox from "./TrashBox"
 import { useSearch } from "@/hooks/useSearch"
 import { useSetting } from "@/hooks/useSetting"
+import Navbar from "./Navbar"
 
 const Navigation = () => {
   const search = useSearch()
   const setting = useSetting()
   const pathname = usePathname()
+  const params = useParams()
   const isMobile = useMediaQuery("(max-width:768px)") //detect mobile device
   const isResizingRef = useRef<boolean>(false) //to get resizing state of sidebar
   const sidebarRef = useRef<ElementRef<"aside">>(null)
@@ -90,7 +92,7 @@ const Navigation = () => {
       setIsResetting(true)
       setIsCollapsed(true)
       sidebarRef.current.style.width = "0px"
-      navbarRef.current.style.setProperty("width", "0px")
+      navbarRef.current.style.setProperty("width", "100%")
       navbarRef.current.style.setProperty("left", "0px")
       setTimeout(() => setIsResetting(false), 300) //to remove animation after 300ms
     }
@@ -120,7 +122,7 @@ const Navigation = () => {
         )}>
         <button
           className={cn(
-            "absolute right-2 top-3 h-6 w-6 rounded-sm text-muted-foreground opacity-0 transition hover:bg-neutral-300 dark:hover:bg-neutral-600 group-hover/sidebar:opacity-100",
+            "absolute right-2 top-3 h-6 w-6 rounded-sm text-muted-foreground opacity-0 transition hover:bg-neutral-300 group-hover/sidebar:opacity-100 dark:hover:bg-neutral-600",
             isMobile && "opacity-100",
           )}
           title="Close sidebar"
@@ -158,15 +160,19 @@ const Navigation = () => {
           isMobile && "left-0 w-full",
         )}
         ref={navbarRef}>
-        <nav className="w-full bg-transparent px-3 py-2">
-          {isCollapsed && (
-            <MenuIcon
-              className="h-6 w-6 text-muted-foreground"
-              role="button"
-              onClick={resetWidth}
-            /> //only show this btn when sidebar is collapsed
-          )}
-        </nav>
+        {!!params.docId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="w-full bg-transparent px-3 py-2">
+            {isCollapsed && (
+              <MenuIcon
+                className="h-6 w-6 text-muted-foreground"
+                role="button"
+                onClick={resetWidth}
+              /> //only show this btn when sidebar is collapsed
+            )}
+          </nav>
+        )}
       </div>
     </>
   )

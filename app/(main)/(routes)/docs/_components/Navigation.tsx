@@ -1,4 +1,22 @@
 import { useState, useRef, ElementRef, useEffect } from "react"
+import { useParams, usePathname } from "next/navigation"
+import { useMediaQuery } from "usehooks-ts"
+import { cn } from "@/lib/utils"
+import { useMutation } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover"
+import UserItems from "./UserItems"
+import Item from "./Item"
+import DocumentList from "./DocumentList"
+import TrashBox from "./TrashBox"
+import Navbar from "./Navbar"
+import { toast } from "sonner"
+import { useSearch } from "@/hooks/useSearch"
+import { useSetting } from "@/hooks/useSetting"
 import {
   ChevronsLeft,
   MenuIcon,
@@ -8,24 +26,6 @@ import {
   Settings,
   Trash,
 } from "lucide-react"
-import { useParams, usePathname } from "next/navigation"
-import { useMediaQuery } from "usehooks-ts"
-import { cn } from "@/lib/utils"
-import UserItems from "./UserItems"
-import { useMutation } from "convex/react"
-import { api } from "@/convex/_generated/api"
-import Item from "./Item"
-import { toast } from "sonner"
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover"
-import DocumentList from "./DocumentList"
-import TrashBox from "./TrashBox"
-import { useSearch } from "@/hooks/useSearch"
-import { useSetting } from "@/hooks/useSetting"
-import Navbar from "./Navbar"
 
 const Navigation = () => {
   const search = useSearch()

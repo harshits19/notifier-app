@@ -1,12 +1,13 @@
 "use client"
-import { Doc } from "@/convex/_generated/dataModel"
-import IconPicker from "./IconPicker"
-import { Button } from "./ui/button"
-import { ImageIcon, Smile, X } from "lucide-react"
 import { ElementRef, useRef, useState } from "react"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
+import { Doc } from "@/convex/_generated/dataModel"
 import TextareaAutosize from "react-textarea-autosize"
+import IconPicker from "./IconPicker"
+import { ImageIcon, Smile, X } from "lucide-react"
+import { Button } from "./ui/button"
+import { useCoverImage } from "@/hooks/useCoverImage"
 
 type ToolbarProps = {
   initialData: Doc<"documents">
@@ -18,7 +19,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   const [value, setValue] = useState(initialData.title)
   const update = useMutation(api.documents.update)
   const removeIcon = useMutation(api.documents.removeIcon)
-
+  const coverImage = useCoverImage()
   const onIconSelect = (icon: string) => {
     update({
       id: initialData._id,
@@ -88,6 +89,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         )}
         {!initialData.coverImage && !preview && (
           <Button
+            onClick={coverImage.onOpen}
             variant="outline"
             size="sm"
             className="text-xs text-muted-foreground">

@@ -3,12 +3,12 @@ import { useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useQuery, useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
-import { toast } from "sonner"
 import { Id } from "@/convex/_generated/dataModel"
+import { toast } from "sonner"
 import Spinner from "@/components/Spinner"
-import { Search, Trash, Undo } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import ConfirmModal from "@/components/ConfirmModal"
+import ConfirmModal from "@/components/modals/ConfirmModal"
+import { Search, Trash, Undo } from "lucide-react"
 
 const TrashBox = () => {
   const router = useRouter()
@@ -36,9 +36,7 @@ const TrashBox = () => {
       error: "Failed to restore note.",
     })
   }
-  const onRemove = (
-    documentId: Id<"documents">,
-  ) => {
+  const onRemove = (documentId: Id<"documents">) => {
     const promise = remove({ id: documentId })
     toast.promise(promise, {
       loading: "Removing Note...",
@@ -83,7 +81,7 @@ const TrashBox = () => {
                 onClick={(e) => onRestore(e, doc._id)}>
                 <Undo className="h-4 w-4 text-muted-foreground" />
               </div>
-              <ConfirmModal onConfirm={()=>onRemove(doc._id)}>
+              <ConfirmModal onConfirm={() => onRemove(doc._id)}>
                 <div
                   role="button"
                   className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"

@@ -1,4 +1,5 @@
 "use client"
+import CoverImage from "@/components/CoverImage"
 import Toolbar from "@/components/Toolbar"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
@@ -17,7 +18,7 @@ const DocIdPage = ({ params: { docId } }: PageProps) => {
   if (document === null) return <div>Not found</div>
   return (
     <div className="pb-40">
-      <div className="h-[35vh]"></div>
+      <CoverImage url={document.coverImage} />
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
         <Toolbar initialData={document} />
       </div>

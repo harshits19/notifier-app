@@ -3,7 +3,7 @@
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"
 import { useSetting } from "@/hooks/useSetting"
 import { Label } from "@/components/ui/label"
-import { ModeToggle } from "./ThemeButton"
+import { ModeToggle } from "../ThemeButton"
 
 const SettingModal = () => {
   const settings = useSetting()

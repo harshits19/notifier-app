@@ -5,8 +5,9 @@ import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { useParams } from "next/navigation"
 import { Id } from "@/convex/_generated/dataModel"
-import Spinner from "@/components/Spinner"
 import Title from "./Title"
+import Banner from "./Banner"
+import Menu from "./Menu"
 
 type NavbarProps = {
   isCollapsed: boolean
@@ -19,8 +20,11 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   })
   if (document === undefined)
     return (
-      <nav className="flex w-full items-center bg-background px-3 py-2">
+      <nav className="flex w-full items-center justify-between bg-background px-3 py-2">
         <Title.Skeleton />
+        <div className="flex items-center gap-x-2">
+          <Menu.Skeleton />
+        </div>
       </nav>
     )
   if (document === null) return null
@@ -34,8 +38,14 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
             onClick={onResetWidth}
           />
         )}
-        <Title initialData={document} />
+        <div className="flex w-full items-center justify-between">
+          <Title initialData={document} />
+          <div className="flex items-center gap-x-2">
+            <Menu documentId={document._id} />
+          </div>
+        </div>
       </nav>
+      {document.isArchived && <Banner documentId={document._id} />}
     </>
   )
 }

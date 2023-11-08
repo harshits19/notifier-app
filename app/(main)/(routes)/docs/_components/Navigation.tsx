@@ -26,12 +26,14 @@ import {
   Settings,
   Trash,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const Navigation = () => {
   const search = useSearch()
   const setting = useSetting()
   const pathname = usePathname()
   const params = useParams()
+  const router = useRouter()
   const isMobile = useMediaQuery("(max-width:768px)") //detect mobile device
   const isResizingRef = useRef<boolean>(false) //to get resizing state of sidebar
   const sidebarRef = useRef<ElementRef<"aside">>(null)
@@ -101,7 +103,9 @@ const Navigation = () => {
   //Backend
   const create = useMutation(api.documents.create) //subscribing to create fn() in api
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" }) //create a new entry in db with tile - "untitled" , returns status(success/fail/error)
+    const promise = create({ title: "Untitled" }).then((docID) =>
+      router.push(`/docs/${docID}`),
+    ) //create a new entry in db with tile - "untitled" , returns status(success/fail/error)
     toast.promise(promise, {
       //display toast on basis of return status from db
       loading: "Creating a new note...",

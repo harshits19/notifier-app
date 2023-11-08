@@ -23,7 +23,7 @@ import { toast } from "sonner"
 import { useUser } from "@clerk/clerk-react"
 
 type ItemProps = {
-  id?: Id<"documents">/* Id of parent note is provided while creating a children note */
+  id?: Id<"documents"> /* Id of parent note is provided while creating a children note */
   documentIcon?: string
   active?: boolean
   expanded?: boolean
@@ -58,15 +58,16 @@ const Item = ({
   const create = useMutation(api.documents.create) //subscribing to create and archive methods in documents api
   const archive = useMutation(api.documents.archive)
 
-  const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => { /* fn for creating a child user */
+  const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    /* fn for creating a child user */
     event.stopPropagation()
-    if (!id) return 
+    if (!id) return
     const promise = create({ title: "Untitled", parentDocument: id }).then(
       (documentId) => {
         if (!expanded) {
           onExpand?.()
         }
-        // router.push(`/docs/${documentId}`)
+        router.push(`/docs/${documentId}`)
       },
     )
     toast.promise(promise, {
@@ -79,7 +80,9 @@ const Item = ({
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation()
     if (!id) return
-    const promise = archive({ id }) /* logic behind- mark archieved status to false in database entry of note */
+    const promise = archive({ id }).then(() => {
+      router.push(`/docs`)
+    }) /* logic behind- mark archieved status to false in database entry of note */
     toast.promise(promise, {
       loading: "Moving to trash...",
       success: "Note moved to trash!",
@@ -88,7 +91,7 @@ const Item = ({
   }
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight
-/* id = string
+  /* id = string
 !id => boolean (if id is present then !id = false)
 !!id => !(false) => !!id = true
 hence !!id = Boolean(id) = true (if id is present)
@@ -102,7 +105,7 @@ hence !!id = Boolean(id) = true (if id is present)
         "group flex min-h-[27px]  w-full items-center py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
         active && "bg-primary/5 text-primary",
       )}>
-      {!!id && (/* to handle child notes dropdown */
+      {!!id /* to handle child notes dropdown */ && (
         <div
           role="button"
           className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
@@ -113,7 +116,7 @@ hence !!id = Boolean(id) = true (if id is present)
       {documentIcon ? (
         <div className="mr-2 shrink-0 text-[18px]">{documentIcon}</div>
       ) : (
-        <Icon className="mr-2 h-[18px] shrink-0 text-muted-foreground" />
+        <Icon className="mr-2 h-[18px] w-[18px] shrink-0 text-muted-foreground" />
       )}
       <span className="truncate">{label}</span>
       {isSearch && (

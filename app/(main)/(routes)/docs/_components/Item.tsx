@@ -1,7 +1,11 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { toast } from "sonner"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
-import { cn } from "@/lib/utils"
+import { useUser } from "@clerk/clerk-react"
+import { useMutation } from "convex/react"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useMutation } from "convex/react"
 import {
   ChevronDown,
   ChevronRight,
@@ -18,9 +21,6 @@ import {
   Plus,
   Trash,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { useUser } from "@clerk/clerk-react"
 
 type ItemProps = {
   id?: Id<"documents"> /* Id of parent note is provided while creating a children note */
@@ -130,7 +130,7 @@ hence !!id = Boolean(id) = true (if id is present)
             <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
               <div
                 role="button"
-                className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600">
+                className="ml-auto h-full rounded-sm opacity-100 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600 md:opacity-0">
                 <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
               </div>
             </DropdownMenuTrigger>
@@ -150,7 +150,7 @@ hence !!id = Boolean(id) = true (if id is present)
             </DropdownMenuContent>
           </DropdownMenu>
           <div
-            className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+            className="ml-auto h-full rounded-sm opacity-100 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600 md:opacity-0"
             role="button"
             onClick={onCreate}>
             <Plus className="h-4 w-4 text-muted-foreground" />

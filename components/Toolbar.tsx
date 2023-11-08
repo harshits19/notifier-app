@@ -65,7 +65,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           </IconPicker>
           <Button
             onClick={onRemoveIcon}
-            className="rounded-full text-xs text-muted-foreground opacity-0 transition group-hover/icon:opacity-100"
+            className="rounded-full text-xs text-muted-foreground opacity-100 md:opacity-0 transition group-hover/icon:opacity-100"
             variant="outline"
             size="icon">
             <X className="h-4 w-4" />
@@ -75,13 +75,13 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
       {!!initialData.icon && preview && (
         <p className="pt-6 text-6xl">{initialData.icon}</p>
       )}
-      <div className="flex items-center gap-x-1 py-4 opacity-0 group-hover:opacity-100">
+      <div className="flex items-center py-4 opacity-70 md:opacity-0 group-hover:opacity-100">
         {!initialData.icon && !preview && (
           <IconPicker asChild onChange={onIconSelect}>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
-              className="text-xs text-muted-foreground">
+              className="text-xs text-muted-foreground h-8 rounded-sm px-2">
               <Smile className="mr-2 h-4 w-4" />
               Add icon
             </Button>
@@ -90,9 +90,9 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         {!initialData.coverImage && !preview && (
           <Button
             onClick={coverImage.onOpen}
-            variant="outline"
+            variant="ghost"
             size="sm"
-            className="text-xs text-muted-foreground">
+            className="text-xs text-muted-foreground h-8 rounded-sm px-2">
             <ImageIcon className="mr-2 h-4 w-4" />
             Add cover
           </Button>
@@ -103,7 +103,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           ref={inputRef}
           onBlur={disableInput}
           onKeyDown={onKeyDown}
-          value={value}
+          placeholder={value}
           onChange={(e) => onInput(e.target.value)}
           className="resize-none break-words bg-transparent text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF]"
         />

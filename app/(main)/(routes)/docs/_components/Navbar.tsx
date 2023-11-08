@@ -9,12 +9,14 @@ import Title from "./Title"
 import Banner from "./Banner"
 import Menu from "./Menu"
 import Publish from "./Publish"
+import { cn } from "@/lib/utils"
 
 type NavbarProps = {
   isCollapsed: boolean
   onResetWidth: () => void
+  isMobile: boolean
 }
-const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
+const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
   const params = useParams()
   const document = useQuery(api.documents.getById, {
     documentId: params.docId as Id<"documents">,
@@ -31,19 +33,23 @@ const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   if (document === null) return null
   return (
     <>
-      <nav className="flex w-full items-center gap-x-4 bg-background px-3 py-2">
+      <nav className="flex w-full items-center gap-x-4 bg-background">
         {isCollapsed && (
           <MenuIcon
-            className="h-6 w-6 text-muted-foreground"
+            className="h-6 w-6 text-muted-foreground ml-3"
             role="button"
             onClick={onResetWidth}
           />
         )}
-        <div className="flex w-full items-center justify-between">
+        <div
+          className={cn(
+            "flex w-full items-center justify-between px-3 py-2",
+            isMobile && !isCollapsed && "hidden",
+          )}>
           <Title initialData={document} />
           <div className="flex items-center gap-x-2">
             <Publish initialData={document} />
-            <Menu documentId={document._id} />
+            <Menu document={document} />
           </div>
         </div>
       </nav>

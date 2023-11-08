@@ -39,7 +39,7 @@ const Navigation = () => {
   const sidebarRef = useRef<ElementRef<"aside">>(null)
   const navbarRef = useRef<ElementRef<"div">>(null)
   const [isResetting, setIsResetting] = useState<boolean>(false) //state while resetting the sidebar width(to show animations)
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobile) //state of sidebar
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobile) //state of sidebar, default - collapsed on mobile
 
   useEffect(() => {
     if (isMobile) collapseSidebar()
@@ -165,17 +165,17 @@ const Navigation = () => {
         )}
         ref={navbarRef}>
         {!!params.docId ? (
-          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} isMobile={isMobile} />
         ) : (
-          <nav className="w-full bg-transparent px-3 py-2">
-            {isCollapsed && (
+          isCollapsed && (
+              <nav className="w-full bg-transparent px-3 py-2">
               <MenuIcon
                 className="h-6 w-6 text-muted-foreground"
                 role="button"
                 onClick={resetWidth}
-              /> //only show this btn when sidebar is collapsed
-            )}
-          </nav>
+              /> 
+              </nav>
+            )
         )}
       </div>
     </>

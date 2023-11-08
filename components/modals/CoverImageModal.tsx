@@ -57,6 +57,7 @@ const CoverImageModal = () => {
           value={file}
           onChange={onChange}
         />
+        <p className="text-xs text-muted-foreground">Max file size supported: 1 mb</p>
       </DialogContent>
     </Dialog>
   )

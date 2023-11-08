@@ -32,16 +32,15 @@ const CoverImage = ({ url, preview }: CoverImgProps) => {
     <div
       className={cn(
         "group relative h-[35vh] w-full",
-        !url && "h-[12vh]",
+        !url && "h-[8vh]",
         url && "bg-muted",
       )}>
       {!!url && <Image src={url} fill alt="cover" className="object-cover" />}
-      {url && !preview && (
-        <div className="absolute bottom-5 right-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
+      {!!url && !preview && (
+        <div className="absolute bottom-5 right-5 flex items-center gap-x-2 opacity-80 group-hover:opacity-100 md:opacity-0">
           <Button
-            size="sm"
             onClick={() => coverImage.onReplace(url)}
-            className="text-xs text-muted-foreground"
+            className="h-7 rounded-sm px-2 text-xs text-muted-foreground"
             variant="outline">
             <ImageIcon className="mr-2 h-4 w-4" />
             Change
@@ -49,7 +48,7 @@ const CoverImage = ({ url, preview }: CoverImgProps) => {
           <Button
             size="sm"
             onClick={onRemove}
-            className="text-xs text-muted-foreground"
+            className="h-7 rounded-sm px-2 text-xs text-muted-foreground"
             variant="outline">
             <X className="mr-2 h-4 w-4" />
             Remove

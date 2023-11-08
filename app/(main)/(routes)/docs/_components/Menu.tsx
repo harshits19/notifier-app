@@ -1,4 +1,4 @@
-import { Id } from "@/convex/_generated/dataModel"
+import { Doc } from "@/convex/_generated/dataModel"
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -14,15 +14,17 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, Trash } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
+import { formatDistanceToNow } from "date-fns"
+
 type MenuProps = {
-  documentId: Id<"documents">
+  document: Doc<"documents">
 }
-const Menu = ({ documentId }: MenuProps) => {
+const Menu = ({ document }: MenuProps) => {
   const { user } = useUser()
   const router = useRouter()
   const archive = useMutation(api.documents.archive)
   const onArchive = () => {
-    const promise = archive({ id: documentId })
+    const promise = archive({ id: document._id })
     toast.promise(promise, {
       loading: "Moving to trash...",
       success: "Note moved to trash!",
@@ -49,6 +51,8 @@ const Menu = ({ documentId }: MenuProps) => {
         <DropdownMenuSeparator />
         <div className="p-2 text-xs text-muted-foreground">
           Last edited by : {user?.fullName}
+          <br />
+          Created {formatDistanceToNow(document._creationTime)} ago
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

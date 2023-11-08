@@ -32,6 +32,7 @@ const DocsPage = () => {
         width="300"
         className="dark:hidden"
         alt="Empty doc"
+        priority
       />
       <Image
         src="/empty-dark.png"
@@ -39,6 +40,7 @@ const DocsPage = () => {
         width="300"
         className="hidden dark:block"
         alt="Empty doc"
+        priority
       />
       <h2 className="pb-2 text-xl font-semibold">
         Welcome! {user?.firstName} to Notifier

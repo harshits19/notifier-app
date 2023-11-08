@@ -21,7 +21,7 @@ const UserItems = () => {
         <div
           className="flex w-full items-center p-3 text-sm hover:bg-primary/5"
           role="button">
-          <div className="flex max-w-[150px] items-center gap-x-2">
+          <div className="flex max-w-[75%] items-center gap-x-2">
             <Avatar className="h-5 w-5">
               <AvatarImage src={user?.imageUrl} />
             </Avatar>

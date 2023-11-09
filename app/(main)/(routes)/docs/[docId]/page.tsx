@@ -13,6 +13,7 @@ type PageProps = {
     docId: Id<"documents">
   }
 }
+
 const DocIdPage = ({ params: { docId } }: PageProps) => {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/Editor"), { ssr: false }),

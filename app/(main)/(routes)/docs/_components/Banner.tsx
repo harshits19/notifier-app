@@ -1,21 +1,30 @@
 "use client"
-import { Id } from "@/convex/_generated/dataModel"
+import { Doc } from "@/convex/_generated/dataModel"
 import { useRouter } from "next/navigation"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import ConfirmModal from "@/components/modals/ConfirmModal"
+import { useEdgeStore } from "@/lib/edgestore"
 
 type BannerProps = {
-  documentId: Id<"documents">
+  documentData: Doc<"documents">
 }
-const Banner = ({ documentId }: BannerProps) => {
+const Banner = ({ documentData }: BannerProps) => {
   const router = useRouter()
   const restore = useMutation(api.documents.restore)
   const remove = useMutation(api.documents.remove)
+  const { edgestore } = useEdgeStore()
+  const removeCoverFromStore = async (url: string) => {
+    if (!url) return
+    await edgestore.publicFiles.delete({
+      url: url,
+    })
+  }
   const onRemove = () => {
-    const promise = remove({ id: documentId })
+    if (documentData.coverImage) removeCoverFromStore(documentData.coverImage) //to make sure cover image is deleted from edge store
+    const promise = remove({ id: documentData._id })
     toast.promise(promise, {
       loading: "Removing Note...",
       success: "Note removed!",
@@ -24,7 +33,7 @@ const Banner = ({ documentId }: BannerProps) => {
     router.push("/docs")
   }
   const onRestore = () => {
-    const promise = restore({ id: documentId })
+    const promise = restore({ id: documentData._id })
     toast.promise(promise, {
       loading: "Restoring Note...",
       success: "Note restored!",
@@ -32,7 +41,7 @@ const Banner = ({ documentId }: BannerProps) => {
     })
   }
   return (
-    <div className="flex w-full items-center justify-center gap-x-2 bg-rose-500 p-2 text-center text-sm text-white">
+    <div className="z-[1000] flex w-full items-center justify-center gap-x-2 bg-rose-500 p-2 text-center text-sm text-white">
       <p>This page is in the trash</p>
       <Button
         size="sm"

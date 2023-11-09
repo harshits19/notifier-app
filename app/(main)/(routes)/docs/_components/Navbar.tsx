@@ -53,7 +53,7 @@ const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
           </div>
         </div>
       </nav>
-      {document.isArchived && <Banner documentId={document._id} />}
+      {document.isArchived && <Banner documentData={document} />}
     </>
   )
 }

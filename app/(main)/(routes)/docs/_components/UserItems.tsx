@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SignOutButton, useUser } from "@clerk/clerk-react"
 import { ChevronsLeftRight } from "lucide-react"
-import Link from "next/link"
 
 const UserItems = () => {
   /* user items displays the user details  */
@@ -48,11 +47,9 @@ const UserItems = () => {
               </Avatar>
             </div>
             <div className="space-y-1">
-              <Link href="/docs" className="contents">
-                <p className="line-clamp-1 text-sm">
-                  {user?.fullName}&apos;s Notes
-                </p>
-              </Link>
+              <p className="line-clamp-1 text-sm">
+                {user?.fullName}&apos;s Notes
+              </p>
             </div>
           </div>
         </div>

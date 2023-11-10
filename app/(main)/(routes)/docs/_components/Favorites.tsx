@@ -8,9 +8,9 @@ const Favorites = ({
 }: {
   documents: Doc<"documents">[] | undefined
 }) => {
-  if (!documents) return
   const router = useRouter()
   const params = useParams()
+  if (!documents) return
   const onRedirect = (documentId: string) => {
     router.push(`/docs/${documentId}`)
   }

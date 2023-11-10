@@ -24,7 +24,7 @@ const DocIdPage = ({ params: { docId } }: PageProps) => {
   })
   const update = useMutation(api.documents.update)
   const onChange = (content: string) => {
-    update({ id: docId, content })
+    update({ id: docId, content, editTimestamp: Date.now() })
   }
   if (document === undefined)
     return (

@@ -53,7 +53,7 @@ const Publish = ({ initialData }: PublishProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="sm" variant="ghost">
+        <Button size="xs" variant="ghost">
           Publish
           {initialData.isPublished && (
             <Globe className="ml-2 h-4 w-4 text-sky-500" />

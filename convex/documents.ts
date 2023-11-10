@@ -17,6 +17,21 @@ const getExistingDoc = async (
   if (existingDocument.userId !== userId) throw new Error("Unauthorized")
   return existingDocument
 }
+
+export const getFavorites = query({
+  handler: async (ctx) => {
+    const userId = await getUserId(ctx)
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isFavorite"), true))
+      .filter((q) => q.eq(q.field("isArchived"), false))
+      .order("desc")
+      .collect()
+    return documents
+  },
+})
+
 export const removeCoverImage = mutation({
   args: { id: v.id("documents") },
   handler: async (ctx, args) => {
@@ -44,6 +59,8 @@ export const update = mutation({
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
     isPublished: v.optional(v.boolean()),
+    isFavorite: v.optional(v.boolean()),
+    editTimestamp: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args //we update rest info, but not id
@@ -157,6 +174,7 @@ export const archive = mutation({
       for (const child of children) {
         await ctx.db.patch(child._id, {
           isArchived: true,
+          isFavorite: false,
         })
         await recursiveArchive(child._id)
       }
@@ -164,6 +182,7 @@ export const archive = mutation({
 
     const document = await ctx.db.patch(args.id, {
       isArchived: true,
+      isFavorite: false,
     })
 
     recursiveArchive(args.id)
@@ -209,13 +228,15 @@ export const create = mutation({
   handler: async (ctx, args) => {
     //ctx - context, args - arguments
     const userId = await getUserId(ctx)
+    //to create a new doc instance in db
     const document = await ctx.db.insert("documents", {
-      //to create a new doc instance in db
       title: args.title,
       parentDocument: args.parentDocument,
       userId: userId, //got userId from ctx.auth.getUserIdentity()
       isArchived: false, //by default values
       isPublished: false,
+      isFavorite: false,
+      editTimestamp: 0,
     })
     return document
   },

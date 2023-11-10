@@ -46,7 +46,6 @@ const CoverImage = ({ url, preview }: CoverImgProps) => {
             Change
           </Button>
           <Button
-            size="sm"
             onClick={onRemove}
             className="h-7 rounded-sm px-2 text-xs text-muted-foreground"
             variant="outline">

@@ -1,3 +1,4 @@
+"use title"
 import { useState, useRef } from "react"
 import { Doc } from "@/convex/_generated/dataModel"
 import { useMutation } from "convex/react"
@@ -43,7 +44,7 @@ const Title = ({ initialData }: TitleProps) => {
       {!!initialData.icon && <p>{initialData.icon}</p>}
       {isEditing ? (
         <Input
-          className="h-7 px-2 focus-visible:ring-transparent"
+          className="h-7 px-2 focus-visible:ring-transparent truncate"
           ref={inputRef}
           onClick={enableInput}
           onBlur={disableInput}
@@ -57,7 +58,7 @@ const Title = ({ initialData }: TitleProps) => {
           size="sm"
           className="h-auto p-1 font-normal"
           onClick={enableInput}>
-          <span className="truncate">{initialData?.title}</span>
+          <span className="truncate max-w-[100px] md:max-w-[10rem]">{initialData?.title}</span>
         </Button>
       )}
     </div>

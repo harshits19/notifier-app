@@ -8,6 +8,7 @@ import IconPicker from "./IconPicker"
 import { ImageIcon, Smile, X } from "lucide-react"
 import { Button } from "./ui/button"
 import { useCoverImage } from "@/hooks/useCoverImage"
+import useSetTitle from "@/hooks/useSetTitle"
 
 type ToolbarProps = {
   initialData: Doc<"documents">
@@ -20,6 +21,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   const update = useMutation(api.documents.update)
   const removeIcon = useMutation(api.documents.removeIcon)
   const coverImage = useCoverImage()
+  useSetTitle(initialData.title)
   const onIconSelect = (icon: string) => {
     update({
       id: initialData._id,
@@ -65,7 +67,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           </IconPicker>
           <Button
             onClick={onRemoveIcon}
-            className="rounded-full text-xs text-muted-foreground opacity-100 md:opacity-0 transition group-hover/icon:opacity-100"
+            className="rounded-full text-xs text-muted-foreground opacity-100 transition group-hover/icon:opacity-100 md:opacity-0"
             variant="outline"
             size="icon">
             <X className="h-4 w-4" />
@@ -75,13 +77,13 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
       {!!initialData.icon && preview && (
         <p className="pt-6 text-6xl">{initialData.icon}</p>
       )}
-      <div className="flex items-center py-4 opacity-70 md:opacity-0 group-hover:opacity-100">
+      <div className="flex items-center py-2 opacity-70 group-hover:opacity-100 md:opacity-0">
         {!initialData.icon && !preview && (
           <IconPicker asChild onChange={onIconSelect}>
             <Button
               variant="ghost"
-              size="sm"
-              className="text-xs text-muted-foreground h-8 rounded-sm px-2">
+              size="xs"
+              className="text-xs text-muted-foreground">
               <Smile className="mr-2 h-4 w-4" />
               Add icon
             </Button>
@@ -91,8 +93,8 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           <Button
             onClick={coverImage.onOpen}
             variant="ghost"
-            size="sm"
-            className="text-xs text-muted-foreground h-8 rounded-sm px-2">
+            size="xs"
+            className="text-xs text-muted-foreground">
             <ImageIcon className="mr-2 h-4 w-4" />
             Add cover
           </Button>
@@ -103,14 +105,14 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           ref={inputRef}
           onBlur={disableInput}
           onKeyDown={onKeyDown}
-          placeholder={value}
+          value={value}
           onChange={(e) => onInput(e.target.value)}
-          className="resize-none break-words bg-transparent text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF]"
+          className="max-w-full resize-none break-words bg-transparent text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF] md:max-w-lg"
         />
       ) : (
         <div
           onClick={enableInput}
-          className="pb-3 text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF]">
+          className="max-w-full break-words pb-3 text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF] md:max-w-lg">
           {initialData.title}
         </div>
       )}

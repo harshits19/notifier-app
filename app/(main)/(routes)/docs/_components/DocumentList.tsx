@@ -14,7 +14,7 @@ type DocListProps = {
   level?: number
   data?: Doc<"documents">
 }
-const DocumentList = ({ parentDocumentId, level = 0, data }: DocListProps) => {
+const DocumentList = ({ parentDocumentId, level = 0 }: DocListProps) => {
   const params = useParams()
   const router = useRouter()
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
@@ -47,10 +47,11 @@ const DocumentList = ({ parentDocumentId, level = 0, data }: DocListProps) => {
         className={cn(
           "hidden text-sm font-medium text-muted-foreground/80",
           expanded && "last:block",
-          level === 0 && "hidden",/* only display when there's no children */
+          level === 0 && "hidden" /* only display when there's no children */,
         )}>
         No pages inside
-      </p>{/* render documents */}
+      </p>
+      {/* render documents */}
       {documents.map((doc) => (
         <div key={doc._id}>
           <Item
@@ -63,6 +64,7 @@ const DocumentList = ({ parentDocumentId, level = 0, data }: DocListProps) => {
             level={level}
             onExpand={() => onExpand(doc._id)}
             expanded={expanded[doc._id]}
+            isFavorite={doc.isFavorite}
           />
           {/* recalling documentlist component and passing prop of parentDocId to render children */}
           {expanded[doc._id] && (

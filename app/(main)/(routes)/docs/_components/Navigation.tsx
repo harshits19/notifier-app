@@ -2,7 +2,7 @@ import { useState, useRef, ElementRef, useEffect } from "react"
 import { useParams, usePathname } from "next/navigation"
 import { useMediaQuery } from "usehooks-ts"
 import { cn } from "@/lib/utils"
-import { useMutation } from "convex/react"
+import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import {
   Popover,
@@ -27,6 +27,7 @@ import {
   Trash,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import Favorites from "./Favorites"
 
 const Navigation = () => {
   const search = useSearch()
@@ -40,6 +41,7 @@ const Navigation = () => {
   const navbarRef = useRef<ElementRef<"div">>(null)
   const [isResetting, setIsResetting] = useState<boolean>(false) //state while resetting the sidebar width(to show animations)
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isMobile) //state of sidebar, default - collapsed on mobile
+  const favoriteDocuments = useQuery(api.documents.getFavorites)
 
   useEffect(() => {
     if (isMobile) collapseSidebar()
@@ -152,6 +154,7 @@ const Navigation = () => {
             </PopoverContent>
           </Popover>
         </div>
+        <Favorites documents={favoriteDocuments} />
         <div
           onMouseDown={handleSidebarResize}
           onClick={resetWidth}
@@ -165,17 +168,21 @@ const Navigation = () => {
         )}
         ref={navbarRef}>
         {!!params.docId ? (
-          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} isMobile={isMobile} />
+          <Navbar
+            isCollapsed={isCollapsed}
+            onResetWidth={resetWidth}
+            isMobile={isMobile}
+          />
         ) : (
           isCollapsed && (
-              <nav className="w-full bg-transparent px-3 py-2">
+            <nav className="w-full bg-transparent px-3 py-2">
               <MenuIcon
                 className="h-6 w-6 text-muted-foreground"
                 role="button"
                 onClick={resetWidth}
-              /> 
-              </nav>
-            )
+              />
+            </nav>
+          )
         )}
       </div>
     </>

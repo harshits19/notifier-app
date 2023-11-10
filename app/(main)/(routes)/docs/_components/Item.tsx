@@ -19,6 +19,8 @@ import {
   LucideIcon,
   MoreHorizontal,
   Plus,
+  Star,
+  StarOff,
   Trash,
 } from "lucide-react"
 
@@ -33,6 +35,7 @@ type ItemProps = {
   label: string
   onClick?: () => void
   icon: LucideIcon
+  isFavorite?: boolean
 }
 const Item = ({
   id,
@@ -45,6 +48,7 @@ const Item = ({
   label,
   onClick,
   icon: Icon,
+  isFavorite,
 }: ItemProps) => {
   const handleExpand = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -57,7 +61,21 @@ const Item = ({
   const router = useRouter()
   const create = useMutation(api.documents.create) //subscribing to create and archive methods in documents api
   const archive = useMutation(api.documents.archive)
-
+  const update = useMutation(api.documents.update)
+  const markfav = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation()
+    if (!id) return
+    const promise = update({ id, isFavorite: !isFavorite })
+    toast.promise(promise, {
+      loading: isFavorite
+        ? "Removing from favorites..."
+        : "Adding to favorites...",
+      success: isFavorite ? "Removed from favorites!" : "Added to favorites!",
+      error: isFavorite
+        ? "Failed to remove from favorites."
+        : "Failed to add to favorites.",
+    })
+  }
   const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     /* fn for creating a child user */
     event.stopPropagation()
@@ -91,6 +109,8 @@ const Item = ({
   }
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight
+  const FavoriteIcon = isFavorite ? StarOff : Star
+
   /* id = string
 !id => boolean (if id is present then !id = false)
 !!id => !(false) => !!id = true
@@ -131,7 +151,7 @@ hence !!id = Boolean(id) = true (if id is present)
               <div
                 role="button"
                 className="ml-auto h-full rounded-sm opacity-100 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600 md:opacity-0">
-                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                <MoreHorizontal className="h-5 w-5 p-[1px] text-muted-foreground" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -139,6 +159,10 @@ hence !!id = Boolean(id) = true (if id is present)
               align="start"
               side="right"
               forceMount>
+              <DropdownMenuItem onClick={markfav}>
+                <FavoriteIcon className="mr-2 h-4 w-4" />
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={onArchive}>
                 <Trash className="mr-2 h-4 w-4" />
                 Delete
@@ -153,7 +177,7 @@ hence !!id = Boolean(id) = true (if id is present)
             className="ml-auto h-full rounded-sm opacity-100 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600 md:opacity-0"
             role="button"
             onClick={onCreate}>
-            <Plus className="h-4 w-4 text-muted-foreground" />
+            <Plus className="h-5 w-5 p-[1px] text-muted-foreground" />
           </div>
         </div>
       )}

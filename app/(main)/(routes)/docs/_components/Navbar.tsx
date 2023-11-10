@@ -1,21 +1,61 @@
 "use client"
 
-import { MenuIcon } from "lucide-react"
-import { useQuery } from "convex/react"
-import { api } from "@/convex/_generated/api"
 import { useParams } from "next/navigation"
-import { Id } from "@/convex/_generated/dataModel"
-import Title from "./Title"
-import Banner from "./Banner"
-import Menu from "./Menu"
-import Publish from "./Publish"
+import { useMutation, useQuery } from "convex/react"
+import { api } from "@/convex/_generated/api"
+import { Doc, Id } from "@/convex/_generated/dataModel"
 import { cn } from "@/lib/utils"
+import Title from "@/app/(main)/(routes)/docs/_components/Title"
+import Banner from "@/app/(main)/(routes)/docs/_components/Banner"
+import Menu from "@/app/(main)/(routes)/docs/_components/Menu"
+import Publish from "@/app/(main)/(routes)/docs/_components/Publish"
+import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+import { MenuIcon, Star } from "lucide-react"
+import { formatDistanceToNow } from "date-fns"
 
 type NavbarProps = {
   isCollapsed: boolean
   onResetWidth: () => void
   isMobile: boolean
 }
+
+const FavBtn = ({ document }: { document: Doc<"documents"> }) => {
+  const update = useMutation(api.documents.update)
+  const markFav = (docId: Id<"documents">) => {
+    const promise = update({ id: docId, isFavorite: !document.isFavorite })
+    toast.promise(promise, {
+      loading: document.isFavorite
+        ? "Removing from favorites..."
+        : "Adding to favorites...",
+      success: document.isFavorite
+        ? "Removed from favorites!"
+        : "Added to favorites!",
+      error: document.isFavorite
+        ? "Failed to remove from favorites."
+        : "Failed to add to favorites.",
+    })
+  }
+  return (
+    <Button
+      variant="ghost"
+      size="xs"
+      onClick={() => markFav(document._id)}
+      title={
+        document.isFavorite
+          ? "Remove from your favorites"
+          : "Add to your favorites"
+      }>
+      <Star
+        className={cn(
+          "h-[18px] w-[18px]",
+          document.isFavorite && "fill-yellow-500 text-yellow-500",
+        )}
+      />
+    </Button>
+  )
+}
+
 const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
   const params = useParams()
   const document = useQuery(api.documents.getById, {
@@ -36,7 +76,7 @@ const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
       <nav className="flex w-full items-center gap-x-4 bg-background">
         {isCollapsed && (
           <MenuIcon
-            className="h-6 w-6 text-muted-foreground ml-3"
+            className="ml-3 h-6 w-6 text-muted-foreground"
             role="button"
             onClick={onResetWidth}
           />
@@ -48,7 +88,16 @@ const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
           )}>
           <Title initialData={document} />
           <div className="flex items-center gap-x-2">
+            {document.editTimestamp !== 0 && (
+              <div className="hidden text-sm text-muted-foreground/70 md:block">
+                {`Edited 
+                ${formatDistanceToNow(document.editTimestamp, {
+                  addSuffix: true,
+                })}`}
+              </div>
+            )}
             <Publish initialData={document} />
+            <FavBtn document={document} />
             <Menu document={document} />
           </div>
         </div>

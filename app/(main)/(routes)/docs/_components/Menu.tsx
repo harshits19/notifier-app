@@ -14,7 +14,6 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, Trash } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
-import { formatDistanceToNow } from "date-fns"
 
 type MenuProps = {
   document: Doc<"documents">
@@ -35,7 +34,7 @@ const Menu = ({ document }: MenuProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" variant="ghost">
+        <Button size="xs" variant="ghost">
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -51,8 +50,6 @@ const Menu = ({ document }: MenuProps) => {
         <DropdownMenuSeparator />
         <div className="p-2 text-xs text-muted-foreground">
           Last edited by : {user?.fullName}
-          <br />
-          Created {formatDistanceToNow(document._creationTime)} ago
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

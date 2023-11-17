@@ -6,7 +6,7 @@ import Toolbar from "@/components/Toolbar"
 import { Skeleton } from "@/components/ui/skeleton"
 import { api } from "@/convex/_generated/api"
 import { Id } from "@/convex/_generated/dataModel"
-import { useMutation, useQuery } from "convex/react"
+import { useQuery } from "convex/react"
 
 type PageProps = {
   params: {
@@ -21,10 +21,6 @@ const DocIdPage = ({ params: { docId } }: PageProps) => {
   const document = useQuery(api.documents.getById, {
     documentId: docId,
   })
-  const update = useMutation(api.documents.update)
-  const onChange = (content: string) => {
-    update({ id: docId, content })
-  }
   if (document === undefined)
     return (
       <div>
@@ -47,7 +43,6 @@ const DocIdPage = ({ params: { docId } }: PageProps) => {
         <Toolbar preview initialData={document} />
         <Editor
           editable={false}
-          onChange={onChange}
           initialContent={document.content}
         />
       </div>

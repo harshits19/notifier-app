@@ -26,6 +26,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
     update({
       id: initialData._id,
       icon,
+      editTimestamp: Date.now() 
     })
   }
   const onRemoveIcon = () => {
@@ -47,7 +48,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   }
   const onInput = (value: string) => {
     setValue(value)
-    update({ id: initialData._id, title: value || "Untitled" })
+    update({ id: initialData._id, title: value || "Untitled", editTimestamp: Date.now() })
   }
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "enter") {

@@ -3,14 +3,14 @@ const Logo = () => {
   return (
     <div className="flex items-center gap-x-1">
       <Image
-        src="/logo.svg"
+        src="/logo.png"
         height="36"
         width="36"
         className="block dark:hidden"
         alt="logo-light"
       />
       <Image
-        src="/logo-dark.svg"
+        src="/logo-dark.png"
         height="36"
         width="36"
         className="hidden dark:block"

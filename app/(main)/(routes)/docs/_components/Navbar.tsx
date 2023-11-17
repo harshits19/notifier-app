@@ -12,7 +12,7 @@ import Publish from "@/app/(main)/(routes)/docs/_components/Publish"
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { MenuIcon, Star } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
+import { calculateTimeDifference } from "@/hooks/useDistanceDate"
 
 type NavbarProps = {
   isCollapsed: boolean
@@ -91,9 +91,7 @@ const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
             {document.editTimestamp !== 0 && (
               <div className="hidden text-sm text-muted-foreground/70 md:block">
                 {`Edited 
-                ${formatDistanceToNow(document.editTimestamp, {
-                  addSuffix: true,
-                })}`}
+                ${calculateTimeDifference(document.editTimestamp)}`}
               </div>
             )}
             <Publish initialData={document} />

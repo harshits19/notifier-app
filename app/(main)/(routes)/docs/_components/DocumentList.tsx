@@ -65,6 +65,10 @@ const DocumentList = ({ parentDocumentId, level = 0 }: DocListProps) => {
             onExpand={() => onExpand(doc._id)}
             expanded={expanded[doc._id]}
             isFavorite={doc.isFavorite}
+            editTimestamp={doc.editTimestamp}
+            coverImage={doc.coverImage}
+            content={doc.content}
+            parentDocument={doc.parentDocument}
           />
           {/* recalling documentlist component and passing prop of parentDocId to render children */}
           {expanded[doc._id] && (

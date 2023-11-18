@@ -11,7 +11,7 @@ export const calculateTimeDifference = (unixDate: number):string => {
   const yearsDifference = Math.floor(daysDifference / 365)
   if (minutesDifference < 60) {
     return `${
-      minutesDifference >= 5 ? minutesDifference + "m ago" : "just now"
+      minutesDifference >= 1 ? minutesDifference + "m ago" : "just now"
     }`
   } else if (hoursDifference < 24) {
     return `${hoursDifference}h ago`

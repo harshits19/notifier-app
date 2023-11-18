@@ -37,7 +37,7 @@ const TrashBox = () => {
     documentId: Id<"documents">,
   ) => {
     e.stopPropagation()
-    const promise = restore({ id: documentId })
+    const promise = restore({ id: documentId }).then(()=>router.push(`/docs/${documentId}`))
     toast.promise(promise, {
       loading: "Restoring Note...",
       success: "Note restored!",

@@ -16,6 +16,8 @@ import {
 import {
   ChevronDown,
   ChevronRight,
+  Copy,
+  Link,
   LucideIcon,
   MoreHorizontal,
   Plus,
@@ -23,6 +25,7 @@ import {
   StarOff,
   Trash,
 } from "lucide-react"
+import { editedDate } from "@/hooks/useEditInfo"
 
 type ItemProps = {
   id?: Id<"documents"> /* Id of parent note is provided while creating a children note */
@@ -36,6 +39,10 @@ type ItemProps = {
   onClick?: () => void
   icon: LucideIcon
   isFavorite?: boolean
+  editTimestamp?: number
+  coverImage?: string
+  content?: string
+  parentDocument?: Id<"documents">
 }
 const Item = ({
   id,
@@ -49,6 +56,10 @@ const Item = ({
   onClick,
   icon: Icon,
   isFavorite,
+  editTimestamp,
+  coverImage,
+  content,
+  parentDocument,
 }: ItemProps) => {
   const handleExpand = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -107,7 +118,25 @@ const Item = ({
       error: "Failed to archive note.",
     })
   }
-
+  const handleCreate = () => {
+    const promise = create({
+      title: `${document.title} - copy`,
+      content: content,
+      coverImage: coverImage,
+      icon: documentIcon,
+      parentDocument: parentDocument,
+    }).then((docID) => router.push(`/docs/${docID}`))
+    toast.promise(promise, {
+      loading: "Creating a duplicate note...",
+      success: "Duplicate note created!",
+      error: "Failed to create a duplicate note.",
+    })
+  }
+  const onCopy = () => {
+    const url = `${origin}/docs/${id}`
+    navigator.clipboard.writeText(url)
+    toast.success("Copied link to clipboard")
+  }
   const ChevronIcon = expanded ? ChevronDown : ChevronRight
   const FavoriteIcon = isFavorite ? StarOff : Star
 
@@ -168,8 +197,18 @@ hence !!id = Boolean(id) = true (if id is present)
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <div className="p-2 text-xs text-muted-foreground">
-                Last edited by: {user?.fullName}
+              <DropdownMenuItem onClick={onCopy}>
+                <Link className="mr-2 h-4 w-4" />
+                Copy Link
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleCreate}>
+                <Copy className="mr-2 h-4 w-4" />
+                Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="flex flex-col p-2 text-xs text-muted-foreground">
+                <span>Last edited by : {user?.fullName}</span>
+                {editTimestamp && <span>{editedDate(editTimestamp)}</span>}
               </div>
             </DropdownMenuContent>
           </DropdownMenu>

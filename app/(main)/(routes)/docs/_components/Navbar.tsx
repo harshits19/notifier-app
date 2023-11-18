@@ -73,10 +73,10 @@ const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
   if (document === null) return null
   return (
     <>
-      <nav className="flex w-full items-center gap-x-4 bg-background">
+      <nav className="flex w-full items-center bg-background">
         {isCollapsed && (
           <MenuIcon
-            className="ml-3 h-6 w-6 text-muted-foreground"
+            className="ml-2 h-6 w-6 text-muted-foreground sm:ml-3"
             role="button"
             onClick={onResetWidth}
           />
@@ -87,7 +87,7 @@ const Navbar = ({ isCollapsed, onResetWidth, isMobile }: NavbarProps) => {
             isMobile && !isCollapsed && "hidden",
           )}>
           <Title initialData={document} />
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center sm:gap-x-1">
             {document.editTimestamp !== 0 && (
               <div className="hidden text-sm text-muted-foreground/70 md:block">
                 {`Edited 

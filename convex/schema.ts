@@ -13,6 +13,7 @@ export default defineSchema({
     isPublished: v.boolean(),
     isFavorite: v.boolean(),
     editTimestamp: v.number(),
+    isLocked:v.boolean()
   })
     .index("by_user", ["userId"])
     .index("by_user_parent", ["userId", "parentDocument"]),

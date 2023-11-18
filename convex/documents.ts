@@ -61,6 +61,7 @@ export const update = mutation({
     isPublished: v.optional(v.boolean()),
     isFavorite: v.optional(v.boolean()),
     editTimestamp: v.optional(v.number()),
+    isLocked:v.optional(v.boolean())
   },
   handler: async (ctx, args) => {
     const { id, ...rest } = args //we update rest info, but not id
@@ -224,6 +225,9 @@ export const create = mutation({
     //args required while calling create fn
     title: v.string(),
     parentDocument: v.optional(v.id("documents")), //required when we create a sub doc(doc inside another doc)
+    content: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
+    icon: v.optional(v.string())
   },
   handler: async (ctx, args) => {
     //ctx - context, args - arguments
@@ -232,11 +236,15 @@ export const create = mutation({
     const document = await ctx.db.insert("documents", {
       title: args.title,
       parentDocument: args.parentDocument,
+      content: args.content,
+      coverImage: args.coverImage,
+      icon: args.icon,
       userId: userId, //got userId from ctx.auth.getUserIdentity()
       isArchived: false, //by default values
       isPublished: false,
       isFavorite: false,
       editTimestamp: 0,
+      isLocked:false
     })
     return document
   },

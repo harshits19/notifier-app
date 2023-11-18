@@ -15,13 +15,13 @@ type PageProps = {
 }
 
 const DocIdPage = ({ params: { docId } }: PageProps) => {
-  const Editor = useMemo(
-    () => dynamic(() => import("@/components/Editor"), { ssr: false }),
-    [],
-  )
   const document = useQuery(api.documents.getById, {
     documentId: docId,
   })
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/Editor"), { ssr: false }),
+    [document?.isLocked],
+  )
   const update = useMutation(api.documents.update)
   const onChange = (content: string) => {
     update({ id: docId, content, editTimestamp: Date.now() })
@@ -43,10 +43,10 @@ const DocIdPage = ({ params: { docId } }: PageProps) => {
   if (document === null) return <div>Not found</div>
   return (
     <div className="pb-40">
-      <CoverImage url={document.coverImage} />
+      <CoverImage url={document.coverImage} preview={document.isLocked}/>
       <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
-        <Toolbar initialData={document} />
-        <Editor onChange={onChange} initialContent={document.content} />
+        <Toolbar initialData={document} preview={document.isLocked} />
+        <Editor onChange={onChange} initialContent={document.content} editable={!(document?.isLocked)} />
       </div>
     </div>
   )

@@ -35,7 +35,7 @@ const CoverImage = ({ url, preview }: CoverImgProps) => {
         !url && "h-[12vh]",
         url && "bg-muted",
       )}>
-      {!!url && <Image src={url} fill alt="cover" className="object-cover" />}
+      {!!url && <Image src={url} alt="cover" fill className="object-cover" />}
       {!!url && !preview && (
         <div className="absolute bottom-5 right-5 flex items-center gap-x-2 opacity-80 group-hover:opacity-100 md:opacity-0">
           <Button

@@ -243,7 +243,7 @@ export const create = mutation({
       isArchived: false, //by default values
       isPublished: false,
       isFavorite: false,
-      editTimestamp: 0,
+      editTimestamp: Date.now(),
       isLocked:false
     })
     return document

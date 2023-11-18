@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 import { api } from "@/convex/_generated/api"
@@ -13,11 +14,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { editedDate } from "@/hooks/useEditInfo"
 import {
+  ArrowUpRight,
   ChevronDown,
   ChevronRight,
   Copy,
-  Link,
+  LinkIcon,
   LucideIcon,
   MoreHorizontal,
   Plus,
@@ -25,7 +28,6 @@ import {
   StarOff,
   Trash,
 } from "lucide-react"
-import { editedDate } from "@/hooks/useEditInfo"
 
 type ItemProps = {
   id?: Id<"documents"> /* Id of parent note is provided while creating a children note */
@@ -188,22 +190,31 @@ hence !!id = Boolean(id) = true (if id is present)
               align="start"
               side="right"
               forceMount>
-              <DropdownMenuItem onClick={markfav}>
-                <FavoriteIcon className="mr-2 h-4 w-4" />
-                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={onArchive}>
                 <Trash className="mr-2 h-4 w-4" />
                 Delete
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onCopy}>
-                <Link className="mr-2 h-4 w-4" />
-                Copy Link
+              <DropdownMenuItem onClick={markfav}>
+                <FavoriteIcon className="mr-2 h-4 w-4" />
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={handleCreate}>
                 <Copy className="mr-2 h-4 w-4" />
                 Duplicate
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link
+                  className="contents"
+                  href={`${origin}/docs/${id}`}
+                  target="_blank">
+                  <ArrowUpRight className="mr-2 h-4 w-4" />
+                  Open in new tab
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onCopy}>
+                <LinkIcon className="mr-2 h-4 w-4" />
+                Copy Link
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <div className="flex flex-col p-2 text-xs text-muted-foreground">

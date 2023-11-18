@@ -38,6 +38,7 @@ const CoverImageModal = () => {
       update({
         id: params.docId as Id<"documents">,
         coverImage: res.url,
+        editTimestamp: Date.now()
       })
     } catch (err) {
       toast.error("Error uploading image. The file size may be too large.")

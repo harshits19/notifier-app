@@ -1,5 +1,5 @@
 import { useState, useRef, ElementRef, useEffect } from "react"
-import { useParams, usePathname } from "next/navigation"
+import { useParams, usePathname, useRouter } from "next/navigation"
 import { useMediaQuery } from "usehooks-ts"
 import { cn } from "@/lib/utils"
 import { useMutation, useQuery } from "convex/react"
@@ -14,6 +14,7 @@ import Item from "./Item"
 import DocumentList from "./DocumentList"
 import TrashBox from "./TrashBox"
 import Navbar from "./Navbar"
+import Favorites from "./Favorites"
 import { toast } from "sonner"
 import { useSearch } from "@/hooks/useSearch"
 import { useSetting } from "@/hooks/useSetting"
@@ -26,8 +27,6 @@ import {
   Settings,
   Trash,
 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import Favorites from "./Favorites"
 
 const Navigation = () => {
   const search = useSearch()

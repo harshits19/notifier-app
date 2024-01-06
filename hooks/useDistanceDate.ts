@@ -1,8 +1,21 @@
-export const calculateTimeDifference = (unixDate: number):string => {
-  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec",]
-  const providedDate = new Date(unixDate)
+export const calculateTimeDifference = (unixDate: number): string => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ]
+  const postDate = new Date(unixDate)
   const currentDate = new Date()
-  const timeDifferenceMillis = currentDate.getTime() - providedDate.getTime()
+  const timeDifferenceMillis = currentDate.getTime() - postDate.getTime()
   const minutesDifference = Math.floor(timeDifferenceMillis / (1000 * 60))
   const hoursDifference = Math.floor(timeDifferenceMillis / (1000 * 60 * 60))
   const daysDifference = Math.floor(
@@ -13,20 +26,22 @@ export const calculateTimeDifference = (unixDate: number):string => {
     return `${
       minutesDifference >= 1 ? minutesDifference + "m ago" : "just now"
     }`
-  } else if (hoursDifference < 24) {
-    return `${hoursDifference}h ago`
-  } else if (daysDifference < 7) {
-    return `${daysDifference}d ago`
-  } else if (
-    daysDifference < 365 &&
-    providedDate.getFullYear() === currentDate.getFullYear()
-  ) {
-    const month = months[providedDate.getMonth()]
-    const day = providedDate.getDate()
-    return `${month} ${day}`
-  } else {
-    return `${yearsDifference > 1 ? yearsDifference + "y" : "year"} ago`
   }
+  if (hoursDifference < 24) {
+    return `${hoursDifference}h ago`
+  }
+  if (daysDifference < 7) {
+    return `${daysDifference}d ago`
+  }
+  if (yearsDifference < 1) {
+    const year = postDate.getFullYear()
+    const month = months[postDate.getMonth()]
+    const day = postDate.getDate()
+    if (year + 1 === currentDate.getFullYear())
+      return `${month} ${day}, ${year}`
+    return `${month} ${day}`
+  }
+  return `${yearsDifference > 1 ? yearsDifference + "y" : "a year"} ago`
 }
 
 /* const timeDifference = calculateTimeDifference(1700115913000)

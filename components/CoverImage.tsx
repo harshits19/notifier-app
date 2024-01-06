@@ -31,11 +31,19 @@ const CoverImage = ({ url, preview }: CoverImgProps) => {
   return (
     <div
       className={cn(
-        "group relative h-[35vh] w-full",
+        "group relative h-[30vh] w-full",
         !url && "h-[12vh]",
-        url && "bg-muted",
+        url && "mt-12 bg-muted",
       )}>
-      {!!url && <Image src={url} alt="cover" fill className="object-cover" />}
+      {!!url && (
+        <Image
+          src={url}
+          alt="cover"
+          fill
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      )}
       {!!url && !preview && (
         <div className="absolute bottom-5 right-5 flex items-center gap-x-2 opacity-80 group-hover:opacity-100 md:opacity-0">
           <Button
